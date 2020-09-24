@@ -12,6 +12,8 @@ library(readxl)
 
 ## Problem 1
 
+importing trashwheel data
+
 ```{r}
 trashwheel_df = 
   read_xlsx(
