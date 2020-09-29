@@ -66,8 +66,16 @@ month_df =
 precip_df = 
   bind_rows(precip_2018, precip_2017)
 
-left_join(precip_df, month_df, by = "month")
+precip_df = 
+  left_join(precip_df, month_df, by = "month")
+
+precip_df = 
+  select(precip_df, -month)
 ```
 
-This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows in our final dataset. Additional data sheets include monthly precipitation data. 
+This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows (or observations in our final dataset. Additional data sheets include monthly precipitation data. Total precipitation in 2018 was `r sum(precip_2018, total)`
+
+Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2017?
+
+
 
