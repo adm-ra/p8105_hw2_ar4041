@@ -27,6 +27,8 @@ trashwheel_df =
     sports_balls = round(sports_balls),
     sports_balls = as.integer(sports_balls)
   )
+
+trash_ball_2017 = subset(trashwheel_df,year==2017)
 ```
 
 read precipitation data for 2017 and 2018
@@ -73,9 +75,8 @@ precip_df =
   select(precip_df, -month)
 ```
 
-This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows (or observations in our final dataset. Additional data sheets include monthly precipitation data. Total precipitation in 2018 was `r sum(precip_2018, total)`
+This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows (or observations in our final dataset. Additional data sheets include monthly precipitation data. There are a total of `r nrow(precip_df)` months collected in the precipitation dataset. Total precipitation in 2018 was `r sum(pull(precip_2018, "total"))` inches. The median number of sports balls in a dumpster in 2017 was `r median(pull(trash_ball_2017, "sports_balls"))`
 
-Be sure to note the number of observations in both resulting datasets, and give examples of key variables. For available data, what was the total precipitation in 2018? What was the median number of sports balls in a dumpster in 2017?
 
 
 
