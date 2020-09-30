@@ -122,6 +122,7 @@ transit_distinct_df =
 
 ## Problem 3
 
+importing the pol-month dataset and cleaning it up a bit
 ```{r}
 polmonth_df = 
   read_csv(
@@ -130,10 +131,24 @@ polmonth_df =
   janitor::clean_names() %>% 
   separate(mon, into = c("year", "month", "day")) %>% 
   mutate(month = as.numeric(month)) %>% 
-  left_join(monthc_df, by = "month") %>% 
+  left_join(month_df, by = "month") %>% 
   select(-month) %>% 
-  relocate(year, month_name, day)
-
+  relocate(year, month_name, day) %>% 
+  mutate(president = if_else(prez_gop == 1, "gop", "dem")) %>% 
+  select(-prez_gop, -prez_dem, -day)
 ```
 
+doing the same with the snp.csv 
+```{r}
+snp_df = 
+  read_csv(
+    "./fivethirtyeight_datasets/snp.csv"
+    ) %>% 
+  janitor::clean_names() %>% 
+  separate(date, into = c("month", "day", "year")) %>% 
+  mutate(month = as.numeric(month)) %>% 
+  left_join(month_df, by = "month") %>% 
+  select(-month, -day) %>% 
+  relocate(year, month_name)
+```
 
