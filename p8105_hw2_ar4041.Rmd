@@ -115,7 +115,8 @@ transit_distinct_df =
     route1:route11,
     names_to = "station_route", 
     values_to = "route_name"
-    ) 
+    ) %>% 
+    drop_na("route_name")
 ```
 
 `r nrow(filter(transit_distinct_df, route_name == "A"))` distinct stations serve the A train. Of these stations, `r nrow(filter(transit_distinct_df, route_name == "A", ada == "TRUE"))` are ADA compliant. 
