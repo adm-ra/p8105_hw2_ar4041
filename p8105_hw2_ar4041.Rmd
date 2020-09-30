@@ -67,13 +67,9 @@ month_df =
   )
 
 precip_df = 
-  bind_rows(precip_2018, precip_2017)
-
-precip_df = 
-  left_join(precip_df, month_df, by = "month")
-
-precip_df = 
-  select(precip_df, -month)
+  bind_rows(precip_2018, precip_2017) %>% 
+  left_join(month_df, by = "month") %>% 
+  select(-month)
 ```
 
 This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trashwheel collects that trash and stores it in a dumpster. The dataset contains information on year, month, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows (or observations in our final dataset. Additional data sheets include monthly precipitation data. There are a total of `r nrow(precip_df)` months collected in the precipitation dataset. Total precipitation in 2018 was `r sum(pull(precip_2018, "total"))` inches. The median number of sports balls in a dumpster in 2017 was `r median(pull(trash_ball_2017, "sports_balls"))`.
@@ -88,7 +84,7 @@ transit_df = read_csv("./NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
   mutate(entry = recode(entry, "YES" = "TRUE", "NO" = "FALSE"))
 ```
 
-This dataset contains the variables `r names(transit_df)`, which describe the line number, the station name, location, and type of entry, the routes it serves, ADA compliance, and vending status. So far, variable names have been cleaned using the clean_names function in the janitor package. Also, the variables division, exit_only, staffing, staff_hours, ada_notes,free_crossover, north_south_street, east_west_street, corner, entrance_latitude, entrance_longitude, station_location, and entrance_location have been removed from the original dataset. The currect dataset has `r nrow(transit_df)` rows and `r ncol(transit_df)` columns. These data are not yet tidy, as there appears to be repeated observations.
+This dataset contains the variables `r names(transit_df)`, which describe the line number, the station name, location, and type of entry, the routes it serves, ADA compliance, and vending status. So far, variable names have been cleaned using the clean_names function in the janitor package. Also, the variables division, exit_only, staffing, staff_hours, ada_notes,free_crossover, north_south_street, east_west_street, corner, entrance_latitude, entrance_longitude, station_location, and entrance_location have been removed from the original dataset. The currect dataset has `r nrow(transit_df)` rows and `r ncol(transit_df)` columns. These data are not yet tidy, as there appears to be repeated observations and it is in wide format- easy to read for humans, not easily read by computers.
 
 ```{r}
 transit_distinct_df =
@@ -96,7 +92,13 @@ transit_distinct_df =
   janitor::clean_names() %>% 
   select(-division, -exit_only, -staffing, -staff_hours, -ada_notes,-free_crossover, -north_south_street, -east_west_street, -corner, -entrance_latitude, -entrance_longitude, -station_location, -entrance_location) %>% 
   mutate(entry = recode(entry, "YES" = "TRUE", "NO" = "FALSE")) %>% 
-  distinct(line, station_name, .keep_all = TRUE) 
+  distinct(line, station_name, .keep_all = TRUE) %>% 
+  mutate( 
+         route8 = as.character("route8"),
+         route9 = as.character("route9"),
+         route10 = as.character("route10"),
+         route11 = as.character("route11"),
+         )
 
 entry_prop_df = 
   nrow(filter(transit_df, vending == "NO", entry == "TRUE")) /
@@ -109,13 +111,7 @@ There are `r nrow(transit_distinct_df)` distinct stations in this dataset.
 
 ```{r}
 transit_distinct_df =
-  mutate(transit_distinct_df, 
-         route8 = as.character("route8"),
-         route9 = as.character("route9"),
-         route10 = as.character("route10"),
-         route11 = as.character("route11"),
-         ) %>% 
-  pivot_longer(
+    pivot_longer(transit_distinct_df,
     route1:route11,
     names_to = "station_route", 
     values_to = "route_name"
@@ -124,5 +120,5 @@ transit_distinct_df =
 
 `r nrow(filter(transit_distinct_df, route_name == "A"))` distinct stations serve the A train. Of these stations, `r nrow(filter(transit_distinct_df, route_name == "A", ada == "TRUE"))` are ADA compliant. 
 
-
+## Problem 3
 
