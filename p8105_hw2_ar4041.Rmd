@@ -152,3 +152,36 @@ snp_df =
   relocate(year, month_name)
 ```
 
+
+cleaning unemployment data to fit other dataset
+```{r}
+monthabb_df = 
+  tibble(
+  month_abb = tolower(month.abb),
+  month_name = month.name
+  )
+
+unemploy_df = 
+  read_csv(
+    "./fivethirtyeight_datasets/unemployment.csv"
+    ) %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    jan:dec,
+    names_to = "month_abb", 
+    values_to = "unemploy_rate"
+  ) %>% 
+  left_join(monthabb_df, by = "month_abb") %>% 
+  select(-month_abb) %>% 
+  relocate(year, month_name) %>% 
+  mutate(year = as.character(year))
+```
+
+time to join the datasets
+```{r}
+fte_df = 
+  left_join(snp_df, polmonth_df, by = c("year","month_name")) %>% 
+  left_join(unemploy_df, by = c("year","month_name"))
+```
+
+
