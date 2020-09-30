@@ -107,6 +107,22 @@ There are `r nrow(transit_distinct_df)` distinct stations in this dataset.
 `r sum(pull(transit_distinct_df, "ada"))` stations are ADA compliant.
 `r scales::label_percent(accuracy = 0.001, suffix = " percent")(entry_prop_df)` of stations entrances / exits without vending allow entrance.
 
+```{r}
+transit_distinct_df =
+  mutate(transit_distinct_df, 
+         route8 = as.character("route8"),
+         route9 = as.character("route9"),
+         route10 = as.character("route10"),
+         route11 = as.character("route11"),
+         ) %>% 
+  pivot_longer(
+    route1:route11,
+    names_to = "station_route", 
+    values_to = "route_name"
+    ) 
+```
+
+`r nrow(filter(transit_distinct_df, route_name == "A"))` distinct stations serve the A train. Of these stations, `r nrow(filter(transit_distinct_df, route_name == "A", ada == "TRUE"))` are ADA compliant. 
 
 
 
