@@ -97,10 +97,15 @@ transit_distinct_df =
   select(-division, -exit_only, -staffing, -staff_hours, -ada_notes,-free_crossover, -north_south_street, -east_west_street, -corner, -entrance_latitude, -entrance_longitude, -station_location, -entrance_location) %>% 
   mutate(entry = recode(entry, "YES" = "TRUE", "NO" = "FALSE")) %>% 
   distinct(line, station_name, .keep_all = TRUE) 
+
+entry_prop_df = 
+  nrow(filter(transit_df, vending == "NO", entry == "TRUE")) /
+  nrow(filter(transit_df, vending == "NO"))
 ```
 
 There are `r nrow(transit_distinct_df)` distinct stations in this dataset. 
 `r sum(pull(transit_distinct_df, "ada"))` stations are ADA compliant.
+`r scales::label_percent(accuracy = 0.001, suffix = " percent")(entry_prop_df)` of stations entrances / exits without vending allow entrance.
 
 
 
