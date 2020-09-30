@@ -29,7 +29,7 @@ trashwheel_df =
     sports_balls = as.integer(sports_balls)
   )
 
-trash_ball_2017 = subset(trashwheel_df,year==2017)
+trash_ball_2017 = subset(trashwheel_df,year == 2017)
 ```
 
 read precipitation data for 2017 and 2018
@@ -121,4 +121,19 @@ transit_distinct_df =
 `r nrow(filter(transit_distinct_df, route_name == "A"))` distinct stations serve the A train. Of these stations, `r nrow(filter(transit_distinct_df, route_name == "A", ada == "TRUE"))` are ADA compliant. 
 
 ## Problem 3
+
+```{r}
+polmonth_df = 
+  read_csv(
+    "./fivethirtyeight_datasets/pols-month.csv"
+    ) %>% 
+  janitor::clean_names() %>% 
+  separate(mon, into = c("year", "month", "day")) %>% 
+  mutate(month = as.numeric(month)) %>% 
+  left_join(monthc_df, by = "month") %>% 
+  select(-month) %>% 
+  relocate(year, month_name, day)
+
+```
+
 
